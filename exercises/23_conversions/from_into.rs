@@ -34,7 +34,24 @@ impl Default for Person {
 // 5. Parse the second element from the split operation into a `u8` as the age.
 // 6. If parsing the age fails, return the default of `Person`.
 impl From<&str> for Person {
-    fn from(s: &str) -> Self {}
+    fn from(s: &str) -> Self {
+        let cosa: Vec<&str> = s.split(",").collect();
+        if cosa.len() != 2 {
+            Person::default()
+        } else {
+            let name = cosa[0];
+            let suspected_age = cosa[1].parse::<u8>();
+
+            match (name, suspected_age) {
+                ("", _) => Person::default(),
+                (_, Err(_)) => Person::default(),
+                (name, Ok(age)) => Person {
+                    name: name.to_string(),
+                    age,
+                },
+            }
+        }
+    }
 }
 
 fn main() {
